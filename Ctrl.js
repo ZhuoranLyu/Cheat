@@ -48,51 +48,49 @@ angular.module('myApp', [])
     for(var src in sources) {
       images[src] = new Image();
       images[src].onload = function() {
-        var stage = new Kinetic.Stage({
-          container: "container",
-          width: 320,
-          height: 568
-        });
-        var layer = new Kinetic.Layer();
-        
-        for(var src in sources) {
-          var cardImg = new Kinetic.Image({
-            image: images[src],
-            x: 0 + src * 20,
-            y: 0,
-            width: 100,
-            height: 137,
-            draggable: true
+        if(++loadedImages >= numImages) {
+          var stage = new Kinetic.Stage({
+            container: "container",
+            width: 320,
+            height: 568
           });
+          var layer = new Kinetic.Layer();
           
-          cardImg.on('dragstart', function(e) {
-            initCoords = {x:e.target.x(), y:e.target.y()};
-            console.log(cardImg.getPosition());
+          for(var src in sources) {
 
-          });
-          cardImg.on('dragend', function(e) {
-            onDragEnd(e);
-          });
+            var cardImg = new Kinetic.Image({
+              image: images[src],
+              x: 0 + src * 20,
+              y: 0,
+              width: 100,
+              height: 137,
+              draggable: true
+            });
+            cardImg.x = src * 20;
+            cardImg.y = 0;
+            
+            cardImg.on('dragstart', function(e) {
 
-          layer.add(cardImg);
-        }
-      stage.add(layer);
+            });
+            cardImg.on('dragend', function(e) {
+              var draggable = e.target;  
+              var tween = new Kinetic.Tween({
+                node: draggable, 
+                duration: 0.2,
+                x: this.x,
+                y: this.y
+              });
+              tween.play();
+            });
+            layer.add(cardImg);
+          }
+        stage.add(layer);
+      }
     };
     images[src].src = sources[src];
     }
   }
 
-  function onDragEnd(e) {
-    var draggable = e.target;  
-    var tween = new Kinetic.Tween({
-      node: draggable, 
-      duration: 0.2,
-      x: initCoords.x,
-      y: initCoords.y
-    });
-    console.log(initCoords);
-    tween.play();
-  }
 }]);
 
 
