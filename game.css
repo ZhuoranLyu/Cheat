@@ -1,2 +1,63 @@
-body{ background-color: ivory; }
-#canvas{border:1px solid red;}
+body {
+  background-image: url("http://us.cdn1.123rf.com/168nwm/ptahi/ptahi1210/ptahi121000002/15713955-green-baize-seamless-background.jpg");
+  font: 100% "Arial Narrow";
+}
+
+#board {
+  width: 94%;
+  margin: 0 auto;
+}
+
+.claim-rank-body {
+  margin: 0 auto;
+}
+
+.claim-rank-btn {
+  margin: 0px 2px 0px;
+}
+
+.info-panel {
+  width: 100%;
+  position:absolute; 
+  top:26%;
+  left:0%;
+  margin: 0 auto;
+}
+
+.button-panel {
+  text-align: center;
+}
+
+.info-panel p {
+  color: #FCFAF2;
+  font-family: "Bookman", Georgia, "Times New Roman", serif;
+  font-size: 2em;
+  font-weight: bold;
+  text-align: center;
+  margin: 0;
+}
+
+.cheat-btn {
+  color: #FCFAF2;
+  font-size: 2em;
+  font-weight: bold;
+  background: transparent;
+  border: 2px solid #030;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.btn {
+  margin: 1px 2px;
+}
+
+.modal-backdrop {
+  z-index: 1000;
+  position: absolute;
+  left: -10%;
+  top: -50%;
+  width: 200%;
+  height: 200%;
+}
