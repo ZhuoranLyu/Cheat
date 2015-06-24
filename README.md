@@ -1,2 +1,2 @@
-# game-seed
-Seed project to build a turn-based multiplayer game
+# game-Cheat
+The famous card game Cheat.
