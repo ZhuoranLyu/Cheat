@@ -212,6 +212,9 @@ angular.module('myApp')
       // If the state is empty, first initialize the board...
       if (gameLogic.isEmptyObj(params.stateAfterMove)) {
         if (params.yourPlayerIndex === 0) {
+          if (params.playMode === "playBlack") {
+
+          }
           gameService.makeMove(gameLogic.getInitialMove());
         }
         return;
@@ -272,10 +275,21 @@ angular.module('myApp')
         }
       }
 
+      // Is it computer's turn?
       if ($scope.currIndex === 1 && $scope.isAiMode) {
         $scope.isYourTurn = false;
         $timeout(sendComputerMove, 1000);
       }
+
+      // If the play mode is not pass and play then "rotate" the board
+      // for the player. Therefore the board will always look from the
+      // point of view of the player in single player mode...
+      if (params.playMode === "playBlack") {
+        $scope.rotate = true;
+      } else {
+        $scope.rotate = false;
+      }
+
     }
 
     function sendUserMove(move) {
@@ -293,7 +307,6 @@ angular.module('myApp')
     var index;
     var holdCardType = 0; // 0 means not holding card, 1 means holding player1 card, 2 means holding player2 card, 3 means holding middle card
     var originalPosition;
-    var originalZIndex = 0;
     function handleDragEvent(type, clientX, clientY) {
       // Center point in gameArea
       var x = clientX - gameArea.offsetLeft;
@@ -312,6 +325,7 @@ angular.module('myApp')
             originalPosition = {left: draggingCard.style.left, top: draggingCard.style.top};
             draggingCard.style.width = '12%';
             draggingCard.style.top = '66%';
+            draggingCard.style.zIndex = 1;
             holdCardType = 1;
           } else {
             index = 0;
@@ -327,6 +341,7 @@ angular.module('myApp')
             originalPosition = {left: draggingCard.style.left, top: draggingCard.style.top};
             draggingCard.style.width = '12%';
             draggingCard.style.top = '66%';
+            draggingCard.style.zIndex = 1;
             holdCardType = 3;
           } else {
             index = 0;
@@ -342,6 +357,7 @@ angular.module('myApp')
             originalPosition = {left: draggingCard.style.left, top: draggingCard.style.top};
             draggingCard.style.width = '12%';
             draggingCard.style.top = '66%';
+            draggingCard.style.zIndex = 1;
             holdCardType = 2;
           } else {
             index = 0;
@@ -362,7 +378,8 @@ angular.module('myApp')
             draggingCard = document.getElementById("playerOne" + index);
             draggingCard.style.width = '10%';
             draggingCard.style.left = originalPosition.left;
-            draggingCard.style.top = originalPosition.top; 
+            draggingCard.style.top = originalPosition.top;
+            draggingCard.style.zIndex = 'initial'; 
           }
         } else if (holdCardType === 2){
           if (yPercent < 0.6 && yPercent > 0.4){
@@ -371,7 +388,8 @@ angular.module('myApp')
             draggingCard = document.getElementById("playerTwo" + index);
             draggingCard.style.width = '10%';
             draggingCard.style.left = originalPosition.left;
-            draggingCard.style.top = originalPosition.top; 
+            draggingCard.style.top = originalPosition.top;
+            draggingCard.style.zIndex = 'initial';  
           }
         } else if (holdCardType === 3){
           if ((yPercent < 0.93 && yPercent > 0.7) || (yPercent < 0.3 && yPercent > 0.05)){
@@ -381,6 +399,7 @@ angular.module('myApp')
             draggingCard.style.width = '10%';
             draggingCard.style.left = originalPosition.left;
             draggingCard.style.top = originalPosition.top; 
+            draggingCard.style.zIndex = 'initial'; 
           }
         } 
         draggingCard = null;
