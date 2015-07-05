@@ -126,7 +126,7 @@
  * Note: Operation III, IV and V are automatically made in the right situation.
  */
 // For unit tests...
-angular.module('myApp', []).factory('gameLogic',
+angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic',
 //angular.module('myApp').factory('cheatLogicService',
   function () {
 

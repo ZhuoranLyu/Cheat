@@ -34,7 +34,8 @@
   <!-- build:js http://yoav-zibin.github.io/emulator/dist/turnBasedServices.2.min.js -->
   <script src="http://yoav-zibin.github.io/emulator/dist/turnBasedServices.2.js"></script>
   <!-- /build -->
-
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
   <link rel="stylesheet" type="text/css" href="http://yoav-zibin.github.io/emulator/main.css">
   <link rel="stylesheet" type="text/css" href="game.css">
 </head>
@@ -54,16 +55,58 @@
             {{ 'RULES_OF_CHEAT' | translate }}
           </h4>
         </div>
-        <div class="modal-body">
-          <carousel style="height: 150px">
-            <slide>
-              {{ 'RULES_SLIDE1' | translate }}
+         <div class="modal-body">
+        <carousel style="height: 140px;">
+          <slide>
+              <table style="position: relative; left:15%;">
+                <tr>
+                  <td style="width:100px;">
+                    {{ 'RULES_SLIDE1' | translate}}
+                  </td>
+                  <td>
+                    <img src="imgs/1.jpg" style="height:120px; ">
+                  </td>
+                </tr>
+              </table>
             </slide>
             <slide>
-              {{ 'RULES_SLIDE2' | translate }}
+              <table style="position: relative; left:15%;">
+                <tr>
+                  <td style="width:100px;">
+                    {{ 'RULES_SLIDE2' | translate}}
+                  </td>
+                  <td>
+                    <img src="imgs/2.jpg" style="height:120px;">
+                  </td>
+                </tr>
+              </table>
             </slide>
-          </carousel>
-        </div>
+            <slide>
+              <table style="position: relative; left:15%;">
+                <tr>
+                  <td style="width:100px;">
+                    {{ 'RULES_SLIDE3' | translate}}
+                  </td>
+                  <td>
+                    <img src="imgs/3.jpg" style="height:120px;">
+                  </td>
+                </tr>
+              </table>
+            </slide>
+            <slide>
+              <table style="position: relative; left:10%;">
+                <tr>
+                  <td style="width:150px;">
+                    {{ 'RULES_SLIDE4' | translate}}
+                  </td>
+                  <td>
+                    <img src="imgs/4.jpg" style="height:120px;">
+                  </td>
+                </tr>
+              </table>
+            </slide>
+        </carousel>
+      </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-primary" ng-click="isHelpModalShown = false">
             {{ 'CLOSE' | translate }}
