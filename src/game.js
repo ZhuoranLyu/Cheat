@@ -314,7 +314,7 @@ angular.module('myApp')
       var xPercent = x / gameArea.clientWidth;
       var yPercent = y / gameArea.clientHeight;
 
-      if (type === "touchstart" || type === "touchmove"){
+      if (type === "touchstart"){
         if (yPercent < 0.93 && yPercent > 0.7 && !holdCardType){
           index = Math.floor(x / (playerOne0.clientWidth / 5));
           if (index >= $scope.playerOneCards.length && index < $scope.playerOneCards.length + 5){
@@ -340,7 +340,7 @@ angular.module('myApp')
           if (draggingCard && $scope.canDrag($scope.middle[index])) {
             originalPosition = {left: draggingCard.style.left, top: draggingCard.style.top};
             draggingCard.style.width = '12%';
-            draggingCard.style.top = '66%';
+            draggingCard.style.top = '36%';
             draggingCard.style.zIndex = 1;
             holdCardType = 3;
           } else {
@@ -356,7 +356,7 @@ angular.module('myApp')
           if (draggingCard && $scope.canDrag($scope.playerTwoCards[index])) {
             originalPosition = {left: draggingCard.style.left, top: draggingCard.style.top};
             draggingCard.style.width = '12%';
-            draggingCard.style.top = '66%';
+            draggingCard.style.top = '0%';
             draggingCard.style.zIndex = 1;
             holdCardType = 2;
           } else {
@@ -364,17 +364,85 @@ angular.module('myApp')
             draggingCard = null;
           }
         } else {
-
+          index = 0;
+          draggingCard = null;
         }
+      } else if (type === "touchmove") {
         if (draggingCard) {
-          draggingCard.style.left = (xPercent - 0.05) * 100 + '%';
-          draggingCard.style.top = (yPercent - 0.15) * 100 + '%';
+          if (holdCardType === 1){
+            if (yPercent < 0.93 && yPercent > 0.7){
+              draggingCard.style.width = '10%';
+              draggingCard.style.left = originalPosition.left;
+              draggingCard.style.top = originalPosition.top;
+              draggingCard.style.zIndex = 'initial'; 
+              index = Math.floor(x / (playerOne0.clientWidth / 5));
+              if (index >= $scope.playerOneCards.length && index < $scope.playerOneCards.length + 5){
+                index = $scope.playerOneCards.length - 1;
+              }
+              draggingCard = document.getElementById("playerOne" + index);
+              if (draggingCard && $scope.canDrag($scope.playerOneCards[index])) {
+                originalPosition = {left: draggingCard.style.left, top: draggingCard.style.top};
+                draggingCard.style.width = '12%';
+                draggingCard.style.top = '66%';
+                draggingCard.style.zIndex = 1;
+                holdCardType = 1;
+              }
+            } else {
+              draggingCard.style.left = (xPercent - 0.05) * 100 + '%';
+              draggingCard.style.top = (yPercent - 0.15) * 100 + '%';
+            }
+          } else if (holdCardType === 2) {
+            if (yPercent < 0.3 && yPercent > 0.05){
+              draggingCard.style.width = '10%';
+              draggingCard.style.left = originalPosition.left;
+              draggingCard.style.top = originalPosition.top;
+              draggingCard.style.zIndex = 'initial'; 
+              index = Math.floor(x / (playerOne0.clientWidth / 5));
+              if (index >= $scope.playerTwoCards.length && index < $scope.playerTwoCards.length + 5){
+                index = $scope.playerTwoCards.length - 1;
+              }
+              draggingCard = document.getElementById("playerTwo" + index);
+              if (draggingCard && $scope.canDrag($scope.playerTwoCards[index])) {
+                originalPosition = {left: draggingCard.style.left, top: draggingCard.style.top};
+                draggingCard.style.width = '12%';
+                draggingCard.style.top = '0%';
+                draggingCard.style.zIndex = 1;
+                holdCardType = 2;
+              }
+            } else {
+              draggingCard.style.left = (xPercent - 0.05) * 100 + '%';
+              draggingCard.style.top = (yPercent - 0.15) * 100 + '%';
+            }
+          } else if (holdCardType === 3) {
+            if (yPercent < 0.65 && yPercent > 0.4){
+              draggingCard.style.width = '10%';
+              draggingCard.style.left = originalPosition.left;
+              draggingCard.style.top = originalPosition.top;
+              draggingCard.style.zIndex = 'initial'; 
+              index = Math.floor(x / (playerOne0.clientWidth / 5));
+              if (index >= $scope.middle.length && index < $scope.middle.length + 5){
+                index = $scope.middle.length - 1;
+              }
+              draggingCard = document.getElementById("middle" + index);
+              if (draggingCard && $scope.canDrag($scope.middle[index])) {
+                originalPosition = {left: draggingCard.style.left, top: draggingCard.style.top};
+                draggingCard.style.width = '12%';
+                draggingCard.style.top = '36%';
+                draggingCard.style.zIndex = 1;
+                holdCardType = 3;
+              }
+            } else {
+              draggingCard.style.left = (xPercent - 0.05) * 100 + '%';
+              draggingCard.style.top = (yPercent - 0.15) * 100 + '%';
+            }
+          }
+
         }
       } else if (type === "touchend") {  
         if (holdCardType === 1){
           if (yPercent < 0.6 && yPercent > 0.4){
             $scope.selectCard($scope.playerOneCards[index]);
-          } else {
+          } else if (draggingCard){
             draggingCard = document.getElementById("playerOne" + index);
             draggingCard.style.width = '10%';
             draggingCard.style.left = originalPosition.left;
