@@ -89,11 +89,12 @@ module.exports = function(grunt) {
             'http://yoav-zibin.github.io/emulator/dist/turnBasedServices.2.min.js',
             'http://yoav-zibin.github.io/emulator/main.css',
             'dist/everything.min.js',
-            'game.css'
+            'game.css',
+            'languages/en.js',
+            'imgs/',
+            'stylesheets/',
           ],
           network: [
-            'languages/en.js',
-            'languages/he.js',
             'dist/everything.min.js.map',
             'dist/everything.js'
           ],
@@ -131,13 +132,18 @@ module.exports = function(grunt) {
     },
   });
 
-  require('load-grunt-tasks')(grunt);
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-karma');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-processhtml');
+  grunt.loadNpmTasks('grunt-manifest');
+  grunt.loadNpmTasks('grunt-http-server');
+  grunt.loadNpmTasks('grunt-protractor-runner');
 
   // Default task(s).
-  grunt.registerTask('default', [
-      'jshint', 'karma',
-      'concat', 'uglify',
-      'processhtml', 'manifest',
+  grunt.registerTask('default', ['jshint', 'karma',
+      'concat', 'processhtml', 'manifest',
       'http-server', 'protractor']);
-
 };

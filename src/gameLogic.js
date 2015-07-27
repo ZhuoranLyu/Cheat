@@ -527,7 +527,6 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic',
           operations.selfConcat([{setTurn: {turnIndex: turnIndexBeforeMove}}]);
           operations.selfConcat([{set: {key: 'stage', value: STAGE.DO_CLAIM }}]);
         }
-
         return operations;
       }
 
@@ -536,7 +535,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic',
        * @param state
        * @returns {boolean}
        */
-       function didCheat(state) {
+      function didCheat(state) {
         var lastClaim = state.claim;
         var lastM = state.middle;
         for (var i = lastM.length - 1; i >= lastM.length - lastClaim[0]; i--) {
@@ -580,6 +579,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic',
           }
         }
 
+        operations.selfConcat([{set: {key: 'claim', value: -1}}]);
         operations.selfConcat(setVisibilities);
 
         return operations;
@@ -597,7 +597,7 @@ angular.module('myApp', ['ngTouch', 'ui.bootstrap']).factory('gameLogic',
         lastM,
         newM;
 
-        if (!angular.isUndefined(lastClaim)) {
+        if (!angular.isUndefined(lastClaim) && lastClaim !== -1) {
           // If the last claim exists, the rank of the latest claim must be
           // close or equal to the last claim.
           check(isCloseRank(lastClaim[1], claim[1]));

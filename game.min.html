@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="myApp" ng-strict-di manifest="game.appcache">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Game</title>
+  <meta name="description" content="Cheat game">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js"></script>
+
+  <!-- For the game rules/instructions, I use carousel from Angular UI + Bootstrap -->
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular-touch.min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.12.1/ui-bootstrap-tpls.min.js"></script>
+
+  <script src="dist/everything.min.js"></script>
+
+  <script>window.angularTranslationLanguages = ['en'];</script>
+  <script src="http://yoav-zibin.github.io/emulator/dist/turnBasedServices.2.min.js"></script>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" type="text/css" href="http://yoav-zibin.github.io/emulator/main.css">
+  <link rel="stylesheet" type="text/css" href="game.css">
+</head>
+<body ng-cloak ng-controller="Ctrl">
+  <div style="position:absolute; bottom:5px; left: 5px; z-index:10;">
+    <span ng-click="isHelpModalShown = true"
+        class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+  </div>
+
+  <div class="overlayModal" ng-class="{zeroOpacity: !isHelpModalShown, oneOpacity: isHelpModalShown}" aria-hidden="true">
+    <div class="modal-backdrop in"></div>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" ng-click="isHelpModalShown = false" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" id="myModalLabel">
+            {{ 'RULES_OF_CHEAT' | translate }}
+          </h4>
+        </div>
+         <div class="modal-body">
+        <carousel style="height: 140px;">
+          <slide>
+              <table style="position: relative; left:15%;">
+                <tr>
+                  <td style="width:100px;">
+                    {{ 'RULES_SLIDE1' | translate}}
+                  </td>
+                  <td>
+                    <img src="imgs/1.jpg" style="height:120px; ">
+                  </td>
+                </tr>
+              </table>
+            </slide>
+            <slide>
+              <table style="position: relative; left:15%;">
+                <tr>
+                  <td style="width:100px;">
+                    {{ 'RULES_SLIDE2' | translate}}
+                  </td>
+                  <td>
+                    <img src="imgs/2.jpg" style="height:120px;">
+                  </td>
+                </tr>
+              </table>
+            </slide>
+            <slide>
+              <table style="position: relative; left:15%;">
+                <tr>
+                  <td style="width:100px;">
+                    {{ 'RULES_SLIDE3' | translate}}
+                  </td>
+                  <td>
+                    <img src="imgs/3.jpg" style="height:120px;">
+                  </td>
+                </tr>
+              </table>
+            </slide>
+            <slide>
+              <table style="position: relative; left:10%;">
+                <tr>
+                  <td style="width:150px;">
+                    {{ 'RULES_SLIDE4' | translate}}
+                  </td>
+                  <td>
+                    <img src="imgs/4.jpg" style="height:120px;">
+                  </td>
+                </tr>
+              </table>
+            </slide>
+            <slide>
+              <table style="position: relative; left:10%;">
+                <tr>
+                  <td style="width:150px;">
+                    {{ 'RULES_SLIDE5' | translate}}
+                  </td>
+                  <td>
+                    <img src="imgs/5.jpg" style="height:120px;">
+                  </td>
+                </tr>
+              </table>
+            </slide>
+        </carousel>
+      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="isHelpModalShown = false">
+            {{ 'CLOSE' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="gameArea">
+    <section id="board">
+      <div ng-repeat="card in playerTwoCards" id="{{'playerTwo' + playerTwoCards.indexOf(card)}}"
+        style="position:absolute; top:0; left:{{playerTwoCards.indexOf(card) /50 * 100}}%; width:10%; ">
+        <img ng-src="{{getImageSrc(card)}}" style="width:100%;">
+      </div>
+
+      <div class="middleStage" style="width:100%; height:29%; position:absolute; top:37.5%; left:-1%; border:solid;">
+      </div>
+
+      <div ng-repeat="card in middle" id="{{'middle' + middle.indexOf(card)}}"
+        style="position:absolute; top:40%; left:{{middle.indexOf(card) /50 * 100}}%; width:10%;" >
+        <img ng-src="{{getImageSrc(card)}}" style="width:100%;">
+      </div>
+
+      <div ng-repeat="card in playerOneCards" id="{{'playerOne' + playerOneCards.indexOf(card)}}"
+        style="position:absolute; top:70%; left:{{playerOneCards.indexOf(card) /50 * 100}}%; width:10%;" >
+        <img ng-src="{{getImageSrc(card)}}" style="width:100%;">
+      </div>
+    </section>
+  </div>
+
+  <div class="info-panel">
+    <p ng-show="checkStage('DO_CLAIM') && isYourTurn && !hasSelectedCards()">Please make a claim.</p>
+    <p ng-show="checkStage('DO_CLAIM') && !isYourTurn">The opponent is making a claim</p>
+    <p ng-show="checkStage('DECLARE_CHEATER') && !isYourTurn">The opponent is thinking... Did you cheat?</p>
+
+    <div class="button-panel">
+      <button ng-show="checkStage('DO_CLAIM') && isYourTurn && hasSelectedCards()" type="button" class="cheat-btn" ng-click="isClaimModalShown = true">
+        Make a claim
+      </button>
+    </div>
+  </div>
+
+  <!-- Do Claim Modal -->
+  <div class="overlayModal" ng-class="{zeroOpacity: !isClaimModalShown, oneOpacity: isClaimModalShown}"  aria-hidden="true">
+    <div class="modal-backdrop in"></div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" ng-click="isClaimModalShown = false" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="doClaimModalLabel">Please choose a rank.</h4>
+          </div>
+          <div class="modal-body">
+            <div class="button-panel">
+             <button type="button" class="btn btn-primary" ng-repeat="rank in claimRanks" ng-click="claim(rank);"><span aria-hidden="true">{{rank}}</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Declare Modal -->
+
+  <div class="overlayModal" ng-class="{zeroOpacity: !isDeclareModalShown, oneOpacity: isDeclareModalShown}"  aria-hidden="true">
+    <div class="modal-backdrop in"></div>
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title" id="declareModalLabel">The opponent claims {{state.claim[0]}} cards of {{state.claim[1]}}.</h4>
+          </div>
+          <div class="modal-body">
+            <div class="button-panel">
+              <button ng-show="checkStage('DECLARE_CHEATER') && isYourTurn" type="button" ng-click="declare(true)" class="btn btn-primary">Call cheater!</button>
+              <button ng-show="checkStage('DECLARE_CHEATER') && isYourTurn && !hasWinner()" type="button" ng-click="declare(false)" class="btn btn-primary">Pass</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

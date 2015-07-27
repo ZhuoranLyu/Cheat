@@ -109,14 +109,15 @@ angular.module('myApp')
       var diffM = $scope.middle.clone();
       diffM.selfSubtract($scope.state.middle);
       var operations = gameLogic.getClaimMove($scope.state, $scope.currIndex, claim, diffM);
-      gameService.makeMove(operations)
+      gameService.makeMove(operations);
     };
 
     // Declare a cheater or pass
     $scope.declare = function (declareCheater) {
+
       $scope.isDeclareModalShown = false;
       var operations = gameLogic.getDeclareCheaterMove($scope.state, $scope.currIndex, declareCheater);
-      gameService.makeMove(operations)
+      gameService.makeMove(operations);
     };
 
     // Get the card data value for css usage
@@ -168,14 +169,14 @@ angular.module('myApp')
 
     // Update the ranks for claiming
     function updateClaimRanks () {
-      if (angular.isUndefined($scope.state.claim)) {
+      if (angular.isUndefined($scope.state.claim) && $scope.state.claim !== -1) {
         $scope.claimRanks = gameLogic.getRankArray();
       } else {
         var rank = $scope.state.claim[1];
         $scope.claimRanks = gameLogic.getRankArray(rank);
       }
+      //$scope.claimRanks = gameLogic.getRankArray();
     }
-
 
     // Check the declaration
     function checkDeclaration() {
@@ -258,9 +259,9 @@ angular.module('myApp')
       checkEndGame();
 
       if ($scope.isYourTurn) {
+        updateClaimRanks();
         switch($scope.state.stage) {
           case STAGE.DO_CLAIM:
-            updateClaimRanks();
             break;
           case STAGE.DECLARE_CHEATER:
             if (params.playMode === 'passAndPlay' || $scope.currIndex == 0) {
@@ -475,89 +476,6 @@ angular.module('myApp')
       } else {
         return;
       }
-      //previousIndex = index;    
-      /*
-      // Is outside gameArea?
-      if (x < 0 || y < 0 || x >= gameArea.clientWidth || y >= gameArea.clientHeight) {
-        if (draggingCard) {
-          // Drag the piece where the touch is (without snapping to a square).
-          var size = getSquareWidthHeight();
-          setdraggingCardTopLeft({top: y - size.height / 2, left: x - size.width / 2});
-        } else {
-          return;
-        }
-      } else {
-        // Inside gameArea. Let's find the containing square's row and col
-        var col = Math.floor(colsNum * x / gameArea.clientWidth);
-        var row = Math.floor(rowsNum * y / gameArea.clientHeight);
-        var r_row = row;
-        var r_col = col;
-
-        if ($scope.rotate) {
-          r_row = 7 - r_row;
-          r_col = 7 - r_col;
-        }
-
-        if (type === "touchstart" && !draggingStartedRowCol) {
-          // drag started
-          var curPiece = $scope.board[r_row][r_col];
-          if (curPiece && curPiece.charAt(0) === getTurn($scope.turnIndex)) {            
-            draggingStartedRowCol = {row: row, col: col};
-            draggingCard = document.getElementById("e2e_test_img_" + 
-              $scope.getPieceKindInId(row, col) + '_' + 
-              draggingStartedRowCol.row + "x" + draggingStartedRowCol.col);
-            if (draggingCard) {
-              draggingCard.style['z-index'] = ++nextZIndex;
-              draggingCard.style['width'] = '80%';
-              draggingCard.style['height'] = '80%';
-              draggingCard.style['top'] = '10%';
-              draggingCard.style['left'] = '10%';
-              draggingCard.style['position'] = 'absolute';
-            }
-
-            draggingCardAvailableMoves = getdraggingCardAvailableMoves(r_row, r_col);
-            for (var i = 0; i < draggingCardAvailableMoves.length; i++) {
-              draggingCardAvailableMoves[i].style['stroke-width'] = '1';
-              draggingCardAvailableMoves[i].style['stroke'] = 'purple';
-              draggingCardAvailableMoves[i].setAttribute("rx", "10");
-              draggingCardAvailableMoves[i].setAttribute("ry", "10");
-            }
-          }
-        }
-        if (!draggingCard) {
-          return;
-        }
-        if (type === "touchend") {
-          var from = draggingStartedRowCol;
-          var to = {row: row, col: col};
-          dragDone(from, to);
-          
-        } else {
-          // Drag continue
-          setdraggingCardTopLeft(getSquareTopLeft(row, col));
-          var centerXY = getSquareCenterXY(row, col);
-        }
-      }
-      if (type === "touchend" || type === "touchcancel" || type === "touchleave") {
-        // drag ended
-        // return the piece to it's original style (then angular will take care to hide it).
-        setdraggingCardTopLeft(getSquareTopLeft(draggingStartedRowCol.row, draggingStartedRowCol.col));    
-        draggingCard.style['width'] = '60%';
-        draggingCard.style['height'] = '60%';
-        draggingCard.style['top'] = '20%';
-        draggingCard.style['left'] = '20%';
-        draggingCard.style['position'] = 'absolute';
-        for (var i = 0; i < draggingCardAvailableMoves.length; i++) {
-              draggingCardAvailableMoves[i].style['stroke-width'] = '';
-              draggingCardAvailableMoves[i].style['stroke'] = '';
-              draggingCardAvailableMoves[i].setAttribute("rx", "");
-              draggingCardAvailableMoves[i].setAttribute("ry", "");
-        }
-        draggingStartedRowCol = null;
-        draggingCard = null;
-        draggingCardAvailableMoves = null;
-      }
-      */
     }
     
     $scope.userClickedSomething = function (userChoices) {
